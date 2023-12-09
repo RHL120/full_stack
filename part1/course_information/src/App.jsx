@@ -8,7 +8,7 @@ const Content = (props) => (
   </div>
 )
 
-const Total = (props) => (<p>Number of props.exercises {props.exercises1 + props.exercises2 + props.exercises3}</p>)
+const Total = (props) => (<p>Number of exercises {props.exercises1 + props.exercises2 + props.exercises3}</p>)
 
 const App = () => {
   const course = 'Half Stack application development'
