@@ -18,11 +18,24 @@ const PersonForm = ({onSubmit, newName, onChangeNewName, newNumber, onChangeNewN
       <button type='submit'>add</button>
     </div>
   </form>
-const Person = ({person}) => <p key={person.name}>{person.name} {person.number}</p>
-const Persons = ({persons, filter}) => {
+const Person = ({person, persons, setPersons}) => {
+  const onClick = () => {
+    if (confirm(`Delete ${person.name} ?`)) {
+      phonebookService.deleteContact(person.id)
+       .then(() => setPersons(persons.filter(p => p.id !== person.id)))
+    }
+  }
+  return (
+    <p key={person.name}>
+      {person.name} {person.number}
+      <button onClick={onClick}>{"delete"}</button>
+    </p>
+  )
+}
+const Persons = ({persons, filter, setPersons}) => {
         return persons
           .filter(({name}) => name.toLowerCase().includes(filter.toLowerCase()))
-          .map(person => <Person key={person.name} person={person} />)}
+          .map(person => <Person key={person.name} person={person} persons={persons} setPersons={setPersons}/>)}
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
@@ -51,7 +64,7 @@ const App = () => {
       <h2>Numbers</h2>
       <PersonForm onSubmit={formOnSubmit} newName={newName} onChangeNewName={onChange(setNewName)}
         newNumber={newNumber} onChangeNewNumber={onChange(setNewNumber)} />
-      <Persons persons={persons} filter={filter}/>
+      <Persons persons={persons} filter={filter} setPersons={setPersons}/>
     </div>
   )
 }

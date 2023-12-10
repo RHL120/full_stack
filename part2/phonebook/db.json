@@ -1,39 +1,24 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "040-123456",
+      "name": "Ada lovelace",
+      "number": "+3376",
       "id": 1
     },
     {
-      "name": "Ada Lovelace",
-      "number": "39-44-5323523",
+      "name": "Sam smith",
+      "number": "33221",
       "id": 2
     },
     {
-      "name": "Dan Abramov",
-      "number": "12-43-234345",
+      "name": "Luke",
+      "number": "",
       "id": 3
     },
     {
-      "name": "Mary Poppendieck",
-      "number": "39-23-6423122",
+      "name": "Simon",
+      "number": "321321",
       "id": 4
-    },
-    {
-      "name": "Steve",
-      "number": "+988922121321",
-      "id": 5
-    },
-    {
-      "name": "sss",
-      "number": "+1238932",
-      "id": 6
-    },
-    {
-      "name": "luke",
-      "number": "steve",
-      "id": 7
     }
   ]
 }
