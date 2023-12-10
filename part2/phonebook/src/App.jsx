@@ -6,8 +6,8 @@ const App = () => {
   ]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setnewNumber] = useState('')
-  const newNameOnChange = (e) => setNewName(e.target.value)
-  const newNumberOnChange = (e) => setnewNumber(e.target.value)
+  const [filter, setFilter] = useState('')
+  const onChange = (setter) => (e) => setter(e.target.value)
   const formOnSubmit = (e) => {
     e.preventDefault()
     if (persons.some(x => x.name === newName)) {
@@ -18,20 +18,26 @@ const App = () => {
   }
   return (
     <div>
+      filter shown with: <input value={filter} onChange={onChange(setFilter)}/>
+      
       <h2>Phonebook</h2>
       <form onSubmit={formOnSubmit}>
         <div>
-          name: <input value={newName} onChange={newNameOnChange}/>
+          name: <input value={newName} onChange={onChange(setNewName)}/>
         </div>
         <div>
-          number: <input value={newNumber} onChange={newNumberOnChange}/>
+          number: <input value={newNumber} onChange={onChange(setnewNumber)}/>
         </div>
         <div>
           <button type="submit">add</button>
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.map(x => <p key={x.name}>{x.name} {x.number}</p>)}
+      {
+        persons
+          .filter(({name}) => name.toLowerCase().includes(filter.toLowerCase()))
+          .map(x => <p key={x.name}>{x.name} {x.number}</p>)
+      }
     </div>
   )
 }
