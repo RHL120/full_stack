@@ -8,7 +8,11 @@ const App = () => {
   const newNameOnChange = (e) => setNewName(e.target.value)
   const formOnSubmit = (e) => {
     e.preventDefault()
-    setPersons(persons.concat({name: newName}))
+    if (persons.some(x => x.name === newName)) {
+      alert(`${newName} is already added to the phonebook`)
+    } else {
+      setPersons(persons.concat({name: newName}))
+    }
   }
   return (
     <div>
