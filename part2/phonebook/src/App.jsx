@@ -48,13 +48,25 @@ const App = () => {
   const onChange = (setter) => (e) => setter(e.target.value)
   const formOnSubmit = (e) => {
     e.preventDefault()
-    if (persons.some(x => x.name === newName)) {
-      alert(`${newName} is already added to the phonebook`)
+    let pidx = persons.findIndex(p => p.name == newName)
+    if (pidx >= 0) {
+      let replace = confirm(`${persons[pidx].name} is already added to the phonebook, replace the old number with a new one?`);
+      if (replace) {
+        const newPerson = {...persons[pidx], number: newNumber};
+        phonebookService.update(persons[pidx].id, newPerson)
+          .then(() => {
+            let newPersons = [...persons]
+            newPersons[pidx] = newPerson
+            setPersons(newPersons)
+          })
+        setNewNumber('')
+        setNewName('')
+      }
     } else {
-      let new_person = {name: newName, number: newNumber}
+      let newPerson = {name: newName, number: newNumber}
       setNewNumber('')
       setNewName('')
-      phonebookService.newContact(new_person).then(() => setPersons(persons.concat(new_person)))
+      phonebookService.newContact(newPerson).then(() => setPersons(persons.concat(newPerson)))
     }
   }
   return (

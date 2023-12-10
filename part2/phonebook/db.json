@@ -1,11 +1,6 @@
 {
   "persons": [
     {
-      "name": "Ada lovelace",
-      "number": "+3376",
-      "id": 1
-    },
-    {
       "name": "Sam smith",
       "number": "33221",
       "id": 2
@@ -17,8 +12,18 @@
     },
     {
       "name": "Simon",
-      "number": "321321",
+      "number": "23",
       "id": 4
+    },
+    {
+      "name": "Sam Smith",
+      "number": "12",
+      "id": 5
+    },
+    {
+      "name": "simon",
+      "number": "35",
+      "id": 6
     }
   ]
 }
