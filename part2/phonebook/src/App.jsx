@@ -1,12 +1,36 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
 
+const Filter = ({filter, onChange}) =>
+  <>
+    filter shown with: <input value={filter} onChange={onChange} name="filter"/>
+  </>
+const PersonForm = ({onSubmit, newName, onChangeNewName, newNumber, onChangeNewNumber}) =>
+  <form onSubmit={onSubmit}>
+    <div>
+      name: <input value={newName} onChange={onChangeNewName} name="fullname"/>
+    </div>
+    <div>
+      number: <input value={newNumber} onChange={onChangeNewNumber} name="number"/>
+    </div>
+    <div>
+      <button type="submit">add</button>
+    </div>
+  </form>
+const Person = ({person}) => <p key={person.name}>{person.name} {person.number}</p>
+const Persons = ({persons, filter}) => 
+        persons
+          .filter(({name}) => name.toLowerCase().includes(filter.toLowerCase()))
+          .map(person => <Person key={person.name} person={person} />)
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
-  ]) 
+  const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setnewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  useEffect(() => {
+    axios.get("http://localhost:30001/persons")
+      .then((resp) => setPersons(resp.data))
+  }, [])
   const onChange = (setter) => (e) => setter(e.target.value)
   const formOnSubmit = (e) => {
     e.preventDefault()
@@ -18,26 +42,12 @@ const App = () => {
   }
   return (
     <div>
-      filter shown with: <input value={filter} onChange={onChange(setFilter)}/>
-      
+      <Filter filter={filter} onChange={onChange(setFilter)} />
       <h2>Phonebook</h2>
-      <form onSubmit={formOnSubmit}>
-        <div>
-          name: <input value={newName} onChange={onChange(setNewName)}/>
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={onChange(setnewNumber)}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
       <h2>Numbers</h2>
-      {
-        persons
-          .filter(({name}) => name.toLowerCase().includes(filter.toLowerCase()))
-          .map(x => <p key={x.name}>{x.name} {x.number}</p>)
-      }
+      <PersonForm onSubmit={formOnSubmit} newName={newName} onChangeNewName={onChange(setNewName)}
+        newNumber={newNumber} onChangeNewNumber={onChange(setnewNumber)} />
+      <Persons persons={persons} filter={filter}/>
     </div>
   )
 }
