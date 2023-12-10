@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
+import phonebookService from './services/phonebook'
 
-const URL = 'http://localhost:30001/persons'
 
 const Filter = ({filter, onChange}) =>
   <>
@@ -20,18 +19,18 @@ const PersonForm = ({onSubmit, newName, onChangeNewName, newNumber, onChangeNewN
     </div>
   </form>
 const Person = ({person}) => <p key={person.name}>{person.name} {person.number}</p>
-const Persons = ({persons, filter}) => 
-        persons
+const Persons = ({persons, filter}) => {
+        return persons
           .filter(({name}) => name.toLowerCase().includes(filter.toLowerCase()))
-          .map(person => <Person key={person.name} person={person} />)
+          .map(person => <Person key={person.name} person={person} />)}
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   useEffect(() => {
-    axios.get(URL)
-      .then((resp) => setPersons(resp.data))
+    phonebookService.getAll()
+      .then((resp) => setPersons(resp))
   }, [])
   const onChange = (setter) => (e) => setter(e.target.value)
   const formOnSubmit = (e) => {
@@ -42,7 +41,7 @@ const App = () => {
       let new_person = {name: newName, number: newNumber}
       setNewNumber('')
       setNewName('')
-      axios.post(URL, new_person).then(() => setPersons(persons.concat(new_person)))
+      phonebookService.newContact(new_person).then(() => setPersons(persons.concat(new_person)))
     }
   }
   return (
