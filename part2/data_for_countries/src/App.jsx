@@ -11,7 +11,12 @@ const CountrySearch = ({val, onChange}) =>
     <input value={val} onChange={onChange} />
   </>
 
-const CountryList = ({countries}) => countries.map(({name}) => <p key={name.official}>{name.common}</p>)
+const CountryList = ({countries, onChoice}) => countries.map(({name}) =>
+	<div key={name.official} className="country-item">
+	  <p>{name.common}</p>
+    <button onClick={() => onChoice(name.official)}>show/hide</button>
+	</div>
+)
 const CountryFlag = ({flag}) => <p style={{fontSize: "10em", marginTop: 0}}>{flag}</p>
 const DisplayCountry = ({country}) =>
   <>
@@ -33,6 +38,10 @@ function App() {
     setFilter(e.target.value)
     setMatches(countries.filter(country => matchInsensitive(e.target.value, country.name.common, country.name.official)))
   }
+  const onCountryChoice = (name) => {
+    setFilter(name)
+    setMatches(countries.filter(country => matchInsensitive(name, country.name.common, country.name.official)))
+  }
   useEffect(() => {
     axios.get(URL)
       .then(resp => setCountries(resp.data))
@@ -45,7 +54,7 @@ function App() {
         (
           matches.length == 1?
           <DisplayCountry country={matches[0]} /> :
-          <CountryList countries={matches} />
+          <CountryList countries={matches} onChoice={onCountryChoice}/>
         ) :
         <p>Too many matches, specify another filter</p>
       }
