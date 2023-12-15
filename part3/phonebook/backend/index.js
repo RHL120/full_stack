@@ -30,4 +30,8 @@ app.get('/api/persons', (req, resp) => {
   resp.json(persons)
 })
 
+app.get('/info', (req, resp) => {
+  resp.send(`<p>Phonebook has info for ${persons.length} people</p><p>${Date().toString()}</p>`)
+})
+
 app.listen(3001)
