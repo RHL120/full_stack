@@ -40,7 +40,38 @@ app.get('/api/persons/:id', (req, resp) => {
   }
 })
 
-app.get('/info', (req, resp) => {
+app.delete('/api/persons/:id', (req, resp) => {
+  const id = Number(req.params.id)
+  persons = persons.filter(p => p.id !== id)
+  console.log(persons)
+  resp.status(204).end()
+})
+
+app.post('/api/persons/', (req, resp) => {
+  const person = req.body
+  person.id = Math.random() * 2**64
+  while (persons.some(p => p.id === person.id)) {
+    id = Math.random() * 2**64
+  }
+  if (!person.name) {
+    resp.status(400).json({
+      error: 'name must not be empty'
+    })
+  } else if (!person.number) {
+    resp.status(400).json({
+      error: 'number must not be empty'
+    })
+  } else if (persons.some(p => p.name === person.name)) {
+    resp.status(400).json({
+      error: 'name must be unique'
+    })
+  } else {
+    persons = persons.concat(person)
+    resp.send(person)
+  }
+})
+
+app.get('/info', (_, resp) => {
   resp.send(`<p>Phonebook has info for ${persons.length} people</p><p>${Date().toString()}</p>`)
 })
 
