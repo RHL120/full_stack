@@ -90,4 +90,8 @@ app.get('/info', (_, resp) => {
   resp.send(`<p>Phonebook has info for ${persons.length} people</p><p>${Date().toString()}</p>`)
 })
 
-app.listen(3001)
+const PORT = process.env.PORT || 3001
+
+app.listen(PORT, () => {
+	console.log(`Server running on port ${PORT}`)
+})
