@@ -21,6 +21,24 @@ const logger = morgan((tokens, req, res) =>
 )
 app.use(logger)
 
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
+const errorHandler = (error, _, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } 
+
+  next(error)
+}
+
+// this has to be the last loaded middleware.
+app.use(errorHandler)
+
 app.get('/api/persons', (_, resp) => {
 	Person.find({}).then(persons => resp.json(persons))
 })
@@ -59,7 +77,10 @@ app.post('/api/persons/', (req, resp) => {
 
 app.get('/info', (_, resp) => {
 	Person.find({}).then(persons => {
-  	resp.send(`<p>Phonebook has info for ${persons.length} people</p><p>${Date().toString()}</p>`)
+		if (!persons) {
+			resp.status(404).end()
+		}
+  		resp.send(`<p>Phonebook has info for ${persons.length} people</p><p>${Date().toString()}</p>`)
 	})
 })
 
