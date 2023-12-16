@@ -29,7 +29,7 @@ const Person = ({person, persons, setPersons, setNotification}) => {
     }
   }
   return (
-    <p key={person.name}>
+    <p key={person.id}>
       {person.name} {person.number}
       <button onClick={onClick}>{"delete"}</button>
     </p>
@@ -37,7 +37,6 @@ const Person = ({person, persons, setPersons, setNotification}) => {
 }
 
 const Notification = ({notif}) => {
-  console.log(notif);
   if (notif == null) {
     return <></>
   }
@@ -86,7 +85,7 @@ const App = () => {
       setTimeout(() => setNotification(null), 5000)
       setNewNumber('')
       setNewName('')
-      phonebookService.newContact(newPerson).then(() => setPersons(persons.concat(newPerson)))
+      phonebookService.newContact(newPerson).then((resp) => setPersons(persons.concat(resp.data)))
     }
   }
   return (
