@@ -1,5 +1,5 @@
 import axios from "axios"
-const URL = 'http://localhost:3001/api/persons'
+const URL = '/api/persons'
 const getAll = () => axios.get(URL).then(resp => resp.data)
 const newContact = new_person => axios.post(URL, new_person)
 const deleteContact = id => axios.delete(`${URL}/${id}`)
